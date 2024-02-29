@@ -74,6 +74,10 @@ def process_data():
     else:
         return jsonify({"error": "No JSON data received"}), 400
 
+@app.route('/coordinates', methods=["GET"])
+def get_coordinates():
+    return send_file("./templates/json/coordinates.json", mimetype='application/json')
+
 def main():
     sqlite_utils.initialize_db()
     app.run(host='0.0.0.0', port=8080, debug=True)
