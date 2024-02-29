@@ -28,7 +28,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def display():
-    return (render_template('hello.html'))
+    return (render_template('./html/hello.html'))
 
 @app.route('/images/banana.svg')
 def display_svg():
@@ -57,7 +57,7 @@ def display_humidity():
     plt.grid(True)
     plt.tight_layout()
     plt.savefig('./templates/images/new_plot.png')
-    return render_template('humidity.html')
+    return render_template('./html/humidity.html')
 
 @app.route('/recieve', methods=["POST"])
 def process_data():
