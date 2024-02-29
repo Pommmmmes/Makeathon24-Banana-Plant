@@ -13,6 +13,10 @@ skunert:
 
 - .gitignore file created to ignore the venv directory so it doesnt get pushed
 
+- added a index html file so you can push a button that shows the last seven humidity data values in a graph
+
+
+
 
 fbock:
 - added a database file on the route ./server/measurements.db
