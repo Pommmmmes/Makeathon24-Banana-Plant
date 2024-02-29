@@ -33,12 +33,12 @@ def delete_row(row_uuid):
     conn.commit()
     conn.close()
 
-def get_array_from_db():
+def get_array_from_db(data):
     conn = sqlite3.connect('./measurements.db')
     cursor = conn.cursor()
 
     # Execute query to fetch array of integers
-    cursor.execute("SELECT humidity FROM measurements")
+    cursor.execute("SELECT " + data + " FROM measurements")
     rows = cursor.fetchall()
 
     # Process retrieved data into an array of integers
@@ -62,7 +62,7 @@ def calculate_ripeness_percentage(r, g, b):
 		return 100
 
 	ripeness_percentage = (1 - (ripe_distance / total_distance)) * 100
-	return ripeness_percentage
+	return round(ripeness_percentage)
 
 def get_percentage_arr():
     # Connect to the SQLite database

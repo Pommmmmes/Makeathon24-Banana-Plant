@@ -27,18 +27,38 @@ def show_graph():
 
 @app.route('/humidity_data', methods=["GET"])
 def display_humidity():
-    humidity_data = sqlite_utils.get_array_from_db()
+    humidity_data = sqlite_utils.get_array_from_db("humidity")
+    temperature_data = sqlite_utils.get_array_from_db("temperature")
+    growth_data = sqlite_utils.get_percentage_arr()
     today = datetime.date.today()
     dates = [str(today - datetime.timedelta(days=i)) for i in range(6, -1, -1)]
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(dates, humidity_data[-7:], marker='o', linestyle='-')
-    plt.title('Daily Soil Moisture of Last 7 Days')
-    plt.xlabel('Date')
-    plt.ylabel('Moisture (%)')
-    plt.xticks(rotation=45)
-    plt.ylim(0, 100)
-    plt.grid(True)
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 10))
+
+   # Plot humidity data
+    ax1.plot(dates, humidity_data[-7:], marker='o', linestyle='-')
+    ax1.set_title('Humidity')
+    ax1.set_ylabel('Moisture (%)')
+    ax1.set_xticklabels(dates, rotation=45)
+    ax1.set_ylim(0, 100)
+    ax1.grid(True)
+
+    # Plot temperature data
+    ax2.plot(dates, temperature_data[-7:], marker='o', linestyle='-')
+    ax2.set_title('Temperature')
+    ax2.set_xlabel('Date')
+    ax2.set_ylabel('Temperature (°C)')
+    ax2.set_xticklabels(dates, rotation=45)
+    ax2.grid(True)
+
+    # Plot growth data
+    ax3.plot(dates, growth_data[-7:], marker='o', linestyle='-')
+    ax3.set_title('Growth')
+    ax3.set_ylabel('Ripeness (%)')
+    ax3.set_xticklabels(dates, rotation=45)
+    ax3.set_ylim(0, 100)
+    ax3.grid(True)
+
     plt.tight_layout()
     plt.savefig('./templates/images/new_plot.png')
     return render_template('./html/humidity.html')
