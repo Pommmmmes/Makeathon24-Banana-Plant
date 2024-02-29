@@ -12,7 +12,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def display():
-    return (render_template('./html/hello.html'))
+    return (render_template('./html/index.html'))
 
 @app.route('/images/banana.svg')
 def display_svg():
@@ -25,8 +25,8 @@ def display_svg():
 def show_graph():
     return send_file('./templates/images/new_plot.png', mimetype='image/png')
 
-@app.route('/humidity_data', methods=["GET"])
-def display_humidity():
+@app.route('/data', methods=["GET"])
+def display_details():
     humidity_data = sqlite_utils.get_array_from_db("humidity")
     temperature_data = sqlite_utils.get_array_from_db("temperature")
     growth_data = sqlite_utils.get_percentage_arr()
@@ -61,7 +61,7 @@ def display_humidity():
 
     plt.tight_layout()
     plt.savefig('./templates/images/new_plot.png')
-    return render_template('./html/humidity.html')
+    return render_template('./html/details.html')
 
 @app.route('/recieve', methods=["POST"])
 def process_data():
