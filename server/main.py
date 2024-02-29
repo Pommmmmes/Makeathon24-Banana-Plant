@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request, send_file
 from PIL import Image
 import sqlite_utils
-import create_plot
 import uuid
 import numpy as np
 import matplotlib
@@ -9,27 +8,11 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import datetime
 
-
-def calculate_ripeness_percentage(r, g, b):
-
-	rgb_color = (r, g, b)
-	unripe_color = (0, 255, 0)
-	ripe_color = (255, 255, 0)
-
-	total_distance = sum((unripe_color[i] - ripe_color[i]) ** 2 for i in range(3))
-	ripe_distance = sum((rgb_color[i] - ripe_color[i]) ** 2 for i in range(3))
-
-	if (total_distance == 0):
-		return 100
-
-	ripeness_percentage = (1 - (ripe_distance / total_distance)) * 100
-	return ripeness_percentage
-
 app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
 def display():
-    return (render_template('hello.html'))
+    return (render_template('./html/index.html'))
 
 @app.route('/images/banana.svg')
 def display_svg():
@@ -42,33 +25,53 @@ def display_svg():
 def show_graph():
     return send_file('./templates/images/new_plot.png', mimetype='image/png')
 
-@app.route('/humidity_data', methods=["GET"])
-def display_humidity():
-    humidity_data = sqlite_utils.get_array_from_db()
+@app.route('/data', methods=["GET"])
+def display_details():
+    humidity_data = sqlite_utils.get_array_from_db("humidity")
+    temperature_data = sqlite_utils.get_array_from_db("temperature")
+    growth_data = sqlite_utils.get_percentage_arr()
     today = datetime.date.today()
     dates = [str(today - datetime.timedelta(days=i)) for i in range(6, -1, -1)]
 
-    plt.figure(figsize=(10, 6))
-    plt.plot(dates, humidity_data[-7:], marker='o', linestyle='-')
-    plt.title('Daily Soil Moisture of Last 7 Days')
-    plt.xlabel('Date')
-    plt.ylabel('Moisture (%)')
-    plt.xticks(rotation=45)
-    plt.ylim(0, 100)
-    plt.grid(True)
+    fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(10, 10))
+
+   # Plot humidity data
+    ax1.plot(dates, humidity_data[-7:], marker='o', linestyle='-')
+    ax1.set_title('Humidity')
+    ax1.set_ylabel('Moisture (%)')
+    ax1.set_xticklabels(dates, rotation=45)
+    ax1.set_ylim(0, 100)
+    ax1.grid(True)
+
+    # Plot temperature data
+    ax2.plot(dates, temperature_data[-7:], marker='o', linestyle='-')
+    ax2.set_title('Temperature')
+    ax2.set_xlabel('Date')
+    ax2.set_ylabel('Temperature (°C)')
+    ax2.set_xticklabels(dates, rotation=45)
+    ax2.grid(True)
+
+    # Plot growth data
+    ax3.plot(dates, growth_data[-7:], marker='o', linestyle='-')
+    ax3.set_title('Growth')
+    ax3.set_ylabel('Ripeness (%)')
+    ax3.set_xticklabels(dates, rotation=45)
+    ax3.set_ylim(0, 100)
+    ax3.grid(True)
+
     plt.tight_layout()
     plt.savefig('./templates/images/new_plot.png')
-    return render_template('humidity.html')
+    return render_template('./html/details.html')
 
 @app.route('/recieve', methods=["POST"])
 def process_data():
     if request.is_json:
         json_data = request.json
         try:
-            sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], json_data["timestamp"],
+            sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], (datetime.datetime.now()).strftime("%Y-%m-%dT%H:%M:%S"),
                     json_data["temperature"], json_data["humidity"], json_data["red"],
                     json_data["green"], json_data["blue"])
-            return "Success"
+            return "Success", 201
         except:
             return "Wrong data json file"
     else:
@@ -77,6 +80,10 @@ def process_data():
 @app.route('/coordinates', methods=["GET"])
 def get_coordinates():
     return send_file("./templates/json/coordinates.json", mimetype='application/json')
+
+@app.route('/percentages', methods=["GET"])
+def get_percentages():
+    return sqlite_utils.get_percentage_arr()
 
 def main():
     sqlite_utils.initialize_db()

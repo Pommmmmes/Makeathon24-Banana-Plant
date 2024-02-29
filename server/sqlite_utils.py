@@ -33,12 +33,12 @@ def delete_row(row_uuid):
     conn.commit()
     conn.close()
 
-def get_array_from_db():
+def get_array_from_db(data):
     conn = sqlite3.connect('./measurements.db')
     cursor = conn.cursor()
 
     # Execute query to fetch array of integers
-    cursor.execute("SELECT humidity FROM measurements")
+    cursor.execute("SELECT " + data + " FROM measurements")
     rows = cursor.fetchall()
 
     # Process retrieved data into an array of integers
@@ -48,6 +48,46 @@ def get_array_from_db():
     conn.close()
 
     return int_array
+
+def calculate_ripeness_percentage(r, g, b):
+
+	rgb_color = (r, g, b)
+	unripe_color = (0, 255, 0)
+	ripe_color = (255, 255, 0)
+
+	total_distance = sum((unripe_color[i] - ripe_color[i]) ** 2 for i in range(3))
+	ripe_distance = sum((rgb_color[i] - ripe_color[i]) ** 2 for i in range(3))
+
+	if (total_distance == 0):
+		return 100
+
+	ripeness_percentage = (1 - (ripe_distance / total_distance)) * 100
+	return round(ripeness_percentage)
+
+def get_percentage_arr():
+    # Connect to the SQLite database
+    conn = sqlite3.connect('measurements.db')
+    cursor = conn.cursor()
+
+    # Fetch data from the database
+    cursor.execute("SELECT red FROM measurements")
+    red = cursor.fetchall()
+
+    cursor.execute("SELECT green FROM measurements")
+    green = cursor.fetchall()
+
+    cursor.execute("SELECT blue FROM measurements")
+    blue = cursor.fetchall()
+
+    results = []
+    for i in range(len(red)):
+        result = calculate_ripeness_percentage(float(red[i][0]), float(green[i][0]), float(blue[i][0]))
+        results.append(result)
+
+    # Close the database connection
+    conn.close()
+    return results
+
 
 # tbd ??
 
