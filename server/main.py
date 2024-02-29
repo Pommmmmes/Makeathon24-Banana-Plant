@@ -8,22 +8,6 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import datetime
 
-
-def calculate_ripeness_percentage(r, g, b):
-
-	rgb_color = (r, g, b)
-	unripe_color = (0, 255, 0)
-	ripe_color = (255, 255, 0)
-
-	total_distance = sum((unripe_color[i] - ripe_color[i]) ** 2 for i in range(3))
-	ripe_distance = sum((rgb_color[i] - ripe_color[i]) ** 2 for i in range(3))
-
-	if (total_distance == 0):
-		return 100
-
-	ripeness_percentage = (1 - (ripe_distance / total_distance)) * 100
-	return ripeness_percentage
-
 app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
@@ -76,6 +60,10 @@ def process_data():
 @app.route('/coordinates', methods=["GET"])
 def get_coordinates():
     return send_file("./templates/json/coordinates.json", mimetype='application/json')
+
+@app.route('/percentages', methods=["GET"])
+def get_percentages():
+    return sqlite_utils.get_percentage_arr()
 
 def main():
     sqlite_utils.initialize_db()
