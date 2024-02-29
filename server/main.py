@@ -1,7 +1,6 @@
 from flask import Flask, render_template, jsonify, request, send_file
 from PIL import Image
 import sqlite_utils
-import create_plot
 import uuid
 import numpy as np
 import matplotlib
@@ -68,7 +67,7 @@ def process_data():
             sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], json_data["timestamp"],
                     json_data["temperature"], json_data["humidity"], json_data["red"],
                     json_data["green"], json_data["blue"])
-            return "Success"
+            return "Success", 201
         except:
             return "Wrong data json file"
     else:
