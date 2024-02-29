@@ -15,19 +15,38 @@
     font-family: Arial, sans-serif;
   }
 
-  #textContainer {
-    font-size: 4em;
-    padding: 20px;
-    border: 2px solid #333;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  #imageContainer {
+    display: block; /* Change to block-level element */
+    text-align: center; /* Center the content horizontally */
+    margin-bottom: 20px; /* Add some spacing between the image container and the button */
+  }
+
+  #imageContainer img {
+    width: 100px; /* Set the width of the SVG image */
+  }
+
+  form {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center;
+  }
+
+  form button {
+    margin-top: 20px; /* Add some spacing between the button and the SVG image */
   }
 </style>
 </head>
 <body>
 
-<div2>I<sup>2</sup></div>
+<div id="imageContainer">
+  <!-- SVG image -->
+  <img src="./images/banana.svg" alt="SVG">
+</div>
+
+<form action="/humidity_data" method="get">
+  <!-- Button to submit the form -->
+  <button type="submit">Get humidity</button>
+</form>
 
 </body>
 </html>
