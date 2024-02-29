@@ -28,3 +28,5 @@ fbock:
 
 njantsch:
 - added function for calculating ripeness in percentage
+
+- added matplotlib diagram creation for moisture of last 7 days
