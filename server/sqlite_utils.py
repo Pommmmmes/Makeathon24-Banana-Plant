@@ -20,7 +20,7 @@ def add_row(uuid: str, id: str, timestamp: int , temp: int,
             humidity: int, red: int, green: int, blue: int):
     conn = sqlite3.connect('measurements.db')
     c = conn.cursor()
-    c.execute("INSERT INTO measurements (uuid, banana_id, temperature, humidity, timestamp, red, green, blue) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    c.execute("INSERT INTO measurements (uuid, id, temperature, humidity, timestamp, red, green, blue) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
               (uuid, id, temp, humidity, timestamp, red, green, blue))
     conn.commit()
     conn.close()
