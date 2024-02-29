@@ -64,7 +64,7 @@ def process_data():
     if request.is_json:
         json_data = request.json
         try:
-            sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], json_data["timestamp"],
+            sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], (datetime.datetime.now()).strftime("%Y-%m-%dT%H:%M:%S"),
                     json_data["temperature"], json_data["humidity"], json_data["red"],
                     json_data["green"], json_data["blue"])
             return "Success", 201
