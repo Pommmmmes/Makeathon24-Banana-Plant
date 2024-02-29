@@ -26,6 +26,22 @@ def main():
 
 main()
 
+# def calculate_ripeness_percentage(r, g, b):
+
+# 	rgb_color = (r, g, b)
+# 	unripe_color = (0, 255, 0)
+# 	ripe_color = (255, 255, 0)
+
+# 	total_distance = sum((unripe_color[i] - ripe_color[i]) ** 2 for i in range(3))
+# 	ripe_distance = sum((rgb_color[i] - ripe_color[i]) ** 2 for i in range(3))
+
+# 	if (total_distance == 0):
+# 		return 100
+
+# 	ripeness_percentage = (1 - (ripe_distance / total_distance)) * 100
+# 	return ripeness_percentage
+
+
 # def initialize_db(
 # def initialize_db():
 # add_row(uuid: str, id: str, timestamp: int , temp: int,

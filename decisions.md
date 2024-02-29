@@ -25,3 +25,6 @@ fbock:
 - two more function are added in the sqlite_utils.py are commented out because they are not finished
 
 - these function are not used yet but are implemented to be used later on
+
+njantsch:
+- added function for calculating ripeness in percentage
