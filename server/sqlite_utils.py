@@ -33,6 +33,22 @@ def delete_row(row_uuid):
     conn.commit()
     conn.close()
 
+def get_array_from_db():
+    conn = sqlite3.connect('./measurements.db')
+    cursor = conn.cursor()
+
+    # Execute query to fetch array of integers
+    cursor.execute("SELECT humidity FROM *")
+    rows = cursor.fetchall()
+
+    # Process retrieved data into an array of integers
+    int_array = [row[0] for row in rows]
+
+    # Close the database connection
+    conn.close()
+
+    return int_array
+
 # tbd ??
 
 # def fetch_row_by_uuid(row_uuid):

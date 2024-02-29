@@ -22,16 +22,23 @@ def calculate_ripeness_percentage(r, g, b):
 app = Flask(__name__)
 
 @app.route('/', methods=["GET"])
-def hello():
-    return render_template('hello.html')
-
-@app.route('/banana', methods=["GET"])
 def display():
-    return (render_template('banana.html'))
+    return (render_template('hello.html'))
 
-@app.route('/images/temp.jpg')
-def send_jpg():
-     return (send_file('./templates/images/temp.jpg', mimetype='image/jpeg'))
+@app.route('/images/banana.svg')
+def display_svg():
+    with open('./templates/images/banana.svg', 'r') as f:
+        svg_content = f.read()
+
+    return svg_content, 200, {'Content-Type': 'image/svg+xml'}
+
+# @app.route('/humidity_data')
+# def display_humidity():
+#     humidity_data = sqlite_utils.get_array_from_db()
+#     graph = create_plot.plot_soil_moisture(humidity_data)
+
+
+
 
 @app.route('/recieve', methods=["POST"])
 def process_data():
@@ -41,19 +48,7 @@ def process_data():
             sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], json_data["timestamp"],
                     json_data["temperature"], json_data["humidity"], json_data["red"],
                     json_data["green"], json_data["blue"])
-            image_path = './templates/images/banana.jpg'
-            img = Image.open(image_path)
-
-            width, height = img.size
-            crop_width = int(width * (round(calculate_ripeness_percentage(int(json_data["red"]), int(json_data["green"]), int(json_data["blue"])), 2) / 100))
-            crop_height = height
-
-            cropped_img = img.crop((0, 0, crop_width, crop_height))
-
-            cropped_img_path = './templates/images/temp.jpg'
-            cropped_img.save(cropped_img_path)
-
-            return "Succesfully uploaded!"
+            return "Success"
         except:
             return "Wrong data json file"
     else:
