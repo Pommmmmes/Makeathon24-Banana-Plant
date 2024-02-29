@@ -8,11 +8,11 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import datetime
 
-app = Flask(__name__)
+app = Flask(__name__,  static_url_path='/static')
 
 @app.route('/', methods=["GET"])
 def display():
-    return (render_template('./html/index.html'))
+    return (render_template('./html/bubble.html'))
 
 @app.route('/images/banana.svg')
 def display_svg():
@@ -24,6 +24,10 @@ def display_svg():
 @app.route('/images/new_plot.png', methods=["GET"])
 def show_graph():
     return send_file('./templates/images/new_plot.png', mimetype='image/png')
+
+@app.route('/map', methods=["GET"])
+def show_map():
+    return send_file('./templates/html/map.html')
 
 @app.route('/data', methods=["GET"])
 def display_details():
