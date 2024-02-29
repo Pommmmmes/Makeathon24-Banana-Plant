@@ -38,7 +38,7 @@ def get_array_from_db():
     cursor = conn.cursor()
 
     # Execute query to fetch array of integers
-    cursor.execute("SELECT humidity FROM *")
+    cursor.execute("SELECT humidity FROM measurements")
     rows = cursor.fetchall()
 
     # Process retrieved data into an array of integers

@@ -1,7 +1,13 @@
 from flask import Flask, render_template, jsonify, request, send_file
 from PIL import Image
 import sqlite_utils
+import create_plot
 import uuid
+import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+import datetime
 
 
 def calculate_ripeness_percentage(r, g, b):
@@ -32,13 +38,27 @@ def display_svg():
 
     return svg_content, 200, {'Content-Type': 'image/svg+xml'}
 
-# @app.route('/humidity_data')
-# def display_humidity():
-#     humidity_data = sqlite_utils.get_array_from_db()
-#     graph = create_plot.plot_soil_moisture(humidity_data)
+@app.route('/images/new_plot.png', methods=["GET"])
+def show_graph():
+    return send_file('./templates/images/new_plot.png', mimetype='image/png')
 
+@app.route('/humidity_data', methods=["GET"])
+def display_humidity():
+    humidity_data = sqlite_utils.get_array_from_db()
+    today = datetime.date.today()
+    dates = [str(today - datetime.timedelta(days=i)) for i in range(6, -1, -1)]
 
-
+    plt.figure(figsize=(10, 6))
+    plt.plot(dates, humidity_data[-7:], marker='o', linestyle='-')
+    plt.title('Daily Soil Moisture of Last 7 Days')
+    plt.xlabel('Date')
+    plt.ylabel('Moisture (%)')
+    plt.xticks(rotation=45)
+    plt.ylim(0, 100)
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig('./templates/images/new_plot.png')
+    return render_template('humidity.html')
 
 @app.route('/recieve', methods=["POST"])
 def process_data():
