@@ -95,36 +95,75 @@ body {
 
   <div id="speechBubble" class="speech-bubble">
     <span id="farmName"></span><br>
-    <form id="actionForm" method="GET">
-      <button class="status-button" type="submit">Show Status</button>
-    </form>
-    <form id="detailsForm" method="GET">
-      <button class="details-button" type="submit">Show Details</button>
-    </form>
-    <button class="close-button" onclick="closeBubble()">X</button>
+
   </div>
 
 <script>
+  // JavaScript function to fetch data for a specific ID
+  function fetchDataById(id) {
+  // Construct the URL with the ID
+    const url = `/fetch_data=${id}`;
 
-    // Function to execute when the image button is clicked
-  function onButtonClick(buttonId, farmName) {
-    var speechBubble = document.getElementById("speechBubble");
-    var button = document.getElementById(buttonId);
-    // Get the position of the button
-    var buttonRect = button.getBoundingClientRect();
-
-    // Set the position of the speech bubble relative to the button
-    button.style
-    speechBubble.style.top = buttonRect.top + button.offsetHeight + 'px';
-    speechBubble.style.left = buttonRect.left + 'px';
-    speechBubble.style.display = "block";
-
-    document.getElementById("farmName").textContent = farmName;
-    var actionForm = document.getElementById("actionForm");
-    var detailsForm = document.getElementById("detailsForm");
-    actionForm.action = "/id=" + buttonId.substring(buttonId.length - 1);
-    detailsForm.action = "/data=" + buttonId.substring(buttonId.length - 1);
+    // Use the fetch API to get the data
+    return fetch(url, {
+      method: 'GET', // The method is GET
+      headers: {
+        'Content-Type': 'application/json', // Assuming the server expects this header
+      },
+    })
+    .then(response => {
+      if (!response.ok) {
+        // If the server response is not ok, throw an error
+        throw new Error(`Network response was not ok, status: ${response.status}`);
+      }
+      return response.json(); // Parse the JSON of the response
+    })
+    .then(data => {
+      // Here you have your data in JSON format
+      console.log(data);
+      return data; // Return the data for further processing
+    })
+    .catch(error => {
+      // Handle any errors that occurred during the fetch
+      console.error('There was a problem with your fetch operation:', error);
+    });
   }
+
+  // Function to execute when the image button is clicked
+  function onButtonClick(buttonId, farmName) {
+  var speechBubble = document.getElementById("speechBubble");
+  var button = document.getElementById(buttonId);
+  var buttonRect = button.getBoundingClientRect();
+
+  // Set the position of the speech bubble
+  speechBubble.style.top = buttonRect.top + button.offsetHeight + 'px';
+  speechBubble.style.left = buttonRect.left + 'px';
+  speechBubble.style.display = "block";
+
+  // Fetch data using the buttonId and update the speech bubble
+  fetchDataById(buttonId.substring(buttonId.length - 1)).then(data => {
+    // Assuming 'data' contains properties like temperature, humidity, ripe, and ripeness
+    // Update the speech bubble content here. Example:
+    speechBubble.innerHTML = `
+      <strong>Farm:</strong> ${farmName}<br>
+      <strong>Temperature:</strong> ${data.temperature}°C<br>
+      <strong>Humidity:</strong> ${data.humidity}%<br>
+      <strong>Ripeness:</strong> ${data.ripeness}% (${data.ripe ? 'Ripe' : 'Not Ripe'})
+      <form action="/id=1" method="GET">
+      <button class="status-button" type="submit">Show Status</button>
+    </form>
+    <form action="/data=1" method="GET">
+      <button class="details-button" type="submit">Show Details</button>
+    </form>
+    <button class="close-button" onclick="closeBubble()">X</button>
+    `;
+  });
+
+  var actionForm = document.getElementById("actionForm");
+  var detailsForm = document.getElementById("detailsForm");
+  actionForm.action = "/id=" + buttonId.substring(buttonId.length - 1);
+  detailsForm.action = "/data=" + buttonId.substring(buttonId.length - 1);
+}
 
   function closeBubble() {
     var speechBubble = document.getElementById("speechBubble");
