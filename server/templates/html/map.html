@@ -134,7 +134,7 @@ body {
   var speechBubble = document.getElementById("speechBubble");
   var button = document.getElementById(buttonId);
   var buttonRect = button.getBoundingClientRect();
-
+  var id = buttonId.substring(buttonId.length - 1);
   // Set the position of the speech bubble
   speechBubble.style.top = buttonRect.top + button.offsetHeight + 'px';
   speechBubble.style.left = buttonRect.left + 'px';
@@ -149,13 +149,13 @@ body {
       <strong>Temperature:</strong> ${data.temperature}°C<br>
       <strong>Humidity:</strong> ${data.humidity}%<br>
       <strong>Ripeness:</strong> ${data.ripeness}% (${data.ripe ? 'Ripe' : 'Not Ripe'})
-      <form action="/id=1" method="GET">
+      <form action="/id=${id}" method="GET">
       <button class="status-button" type="submit">Show Status</button>
-    </form>
-    <form action="/data=1" method="GET">
-      <button class="details-button" type="submit">Show Details</button>
-    </form>
-    <button class="close-button" onclick="closeBubble()">X</button>
+        </form>
+      <form action="/data=${id}" method="GET">
+        <button class="details-button" type="submit">Show Details</button>
+      </form>
+      <button class="close-button" onclick="closeBubble()">X</button>
     `;
   });
 
