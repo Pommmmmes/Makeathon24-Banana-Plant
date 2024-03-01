@@ -25,6 +25,14 @@ def display_svg():
 def show_graph():
     return send_file('./templates/images/new_plot.png', mimetype='image/png')
 
+@app.route('/images/bn_button.png', methods=["GET"])
+def display_banana_button():
+    return send_file('./templates/images/bn_button.png', mimetype='image/png')
+
+@app.route('/images/bananaplantation.jpeg', methods=["GET"])
+def display_banana_plantation():
+    return send_file('./templates/images/bananaplantation.jpeg', mimetype='image/jpeg')
+
 @app.route('/map', methods=["GET"])
 def show_map():
     return send_file('./templates/html/map.html')
