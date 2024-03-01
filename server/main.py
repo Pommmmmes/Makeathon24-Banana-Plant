@@ -14,12 +14,32 @@ app = Flask(__name__,  static_url_path='/static')
 def display():
     return (render_template('./html/bubble.html'))
 
+@app.route('/images/marker-icon-2x-red.png', methods=["GET"])
+def display_png_red():
+    return send_file('./templates/images/marker-icon-2x-red.png', mimetype='image/png')
+
+@app.route('/images/marker-icon-blue.png', methods=["GET"])
+def display_png_blue():
+    return send_file('./templates/images/marker-icon-blue.png', mimetype='image/png')
+
+@app.route('/id=<id>')
+def display_plant_data(id):
+    data = sqlite_utils.get_id_data(id)
+    temperature = data[-1][2]
+    humidity = data[-1][3]
+    ripeness = sqlite_utils.calculate_ripeness_percentage(data[-1][5], data[-1][6], data[-1][7])
+    return render_template('./html/banana_bush.html', temperature=temperature, humidity=humidity, ripeness=ripeness)
+
 @app.route('/images/banana.svg')
 def display_svg():
     with open('./templates/images/banana.svg', 'r') as f:
         svg_content = f.read()
 
     return svg_content, 200, {'Content-Type': 'image/svg+xml'}
+
+@app.route('/images/sky.jpg')
+def display_background():
+    return send_file('./templates/images/sky.jpg', mimetype='image/jpg')
 
 @app.route('/images/new_plot.png', methods=["GET"])
 def show_graph():
@@ -82,10 +102,10 @@ def process_data():
         try:
             sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], (datetime.datetime.now()).strftime("%Y-%m-%dT%H:%M:%S"),
                     json_data["temperature"], json_data["humidity"], json_data["red"],
-                    json_data["green"], json_data["blue"])
+                    json_data["green"], json_data["blue"], json_data["ripe"])
             return "Success", 201
-        except:
-            return "Wrong data json file"
+        except KeyError:
+            return "Wrong data json file", 406
     else:
         return jsonify({"error": "No JSON data received"}), 400
 

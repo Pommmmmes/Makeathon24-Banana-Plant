@@ -11,17 +11,18 @@ def initialize_db():
                 timestamp INTEGER,
               	red INTEGER,
               	green INTEGER,
-              	blue INTEGER);''')
+              	blue INTEGER,
+                ripe INTEGER);''')
     conn.commit()
     conn.close()
 
 
 def add_row(uuid: str, id: str, timestamp: int , temp: int,
-            humidity: int, red: int, green: int, blue: int):
+            humidity: int, red: int, green: int, blue: int, ripe: int):
     conn = sqlite3.connect('measurements.db')
     c = conn.cursor()
-    c.execute("INSERT INTO measurements (uuid, id, temperature, humidity, timestamp, red, green, blue) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-              (uuid, id, temp, humidity, timestamp, red, green, blue))
+    c.execute("INSERT INTO measurements (uuid, id, temperature, humidity, timestamp, red, green, blue, ripe) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              (uuid, id, temp, humidity, timestamp, red, green, blue, ripe))
     conn.commit()
     conn.close()
 
@@ -87,6 +88,19 @@ def get_percentage_arr():
     # Close the database connection
     conn.close()
     return results
+
+def get_id_data(id):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('measurements.db')
+    cursor = conn.cursor()
+
+    # Fetch data from the database
+    cursor.execute("SELECT * FROM measurements WHERE id=" + id)
+    data = cursor.fetchall()
+
+    # Close the database connection
+    conn.close()
+    return data
 
 
 # tbd ??

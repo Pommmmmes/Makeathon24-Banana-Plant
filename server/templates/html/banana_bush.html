@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Thermostat CSS</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+  <style>
+@charset "UTF-8";
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+* {
+  box-sizing: border-box;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html, body {
+  margin: 0;
+  background-image: url('../images/sky.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: "Open Sans", sans-serif;
+}
+
+.center_radius, .thermostat .center .small, .thermostat .center, .thermostat .bar, .thermostat {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.thermostat {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: #6D697F;
+  box-shadow: inset 0px -6px 1px 2px rgba(0, 0, 0, 0.35), 0px 7px 40px 11px rgba(84, 81, 97, 0.4);
+}
+.thermostat:hover .number {
+  opacity: 1;
+}
+.thermostat .shadow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateZ(10deg);
+  width: 25px;
+  height: 86%;
+  text-align: center;
+  transition: 0.7s ease;
+  -webkit-animation: shadow 1.4s ease-out both;
+          animation: shadow 1.4s ease-out both;
+}
+.thermostat .shadow .shadow-cube {
+  position: absolute;
+  top: 0;
+  width: 25px;
+  height: 0px;
+  box-shadow: 0 0 45px 13px rgba(255, 158, 35, 0.5);
+}
+.thermostat .number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateZ(10deg);
+  width: 40px;
+  height: 82%;
+  text-align: center;
+  transition: 0.7s ease;
+  opacity: 0;
+}
+.thermostat .number .ext {
+  font-size: 16px;
+  color: white;
+  font-weight: 1000;
+  text-shadow: 1px 3px 3px #302e38;
+}
+.thermostat .bar {
+  position: absolute;
+  width: 356px;
+  height: 356px;
+}
+.thermostat .bar .inner_bar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 344px;
+  height: 344px;
+  margin-left: -172px;
+  margin-top: -172px;
+  border-radius: 100%;
+  background-color: #6D697F;
+  z-index: 4;
+}
+.thermostat .bar .inner_bar:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 70px solid transparent;
+  border-left: 70px solid transparent;
+  border-right: 70px solid transparent;
+  border-bottom: 150px solid #6D697F;
+  bottom: -7px;
+  left: 50%;
+  transform: translatex(-50%);
+}
+.thermostat .bar .hold {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  clip: rect(0px, 356px, 356px, 178px);
+  border-radius: 100%;
+  background-color: #3a3749;
+}
+.thermostat .bar .fill {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 100%;
+  clip: rect(0px, 178px, 356px, 0px);
+}
+.thermostat .bar .fill1 {
+  background: -webkit-linear-gradient(top, #FF4900 20%, #FF4900 100%);
+}
+.thermostat .bar .fill2 {
+  background: -webkit-linear-gradient(top, #FF4900 40%, #FF9E23 100%);
+}
+.thermostat .bar .right {
+  z-index: 3;
+  transform: rotate(180deg);
+}
+.thermostat .bar .right .fill {
+  z-index: 3;
+  transform: rotate(180deg);
+  -webkit-animation: right 1s linear both;
+          animation: right 1s linear both;
+  transition: transform 0.6s;
+}
+.thermostat .bar .left .fill {
+  z-index: 1;
+  -webkit-animation: left 0.3s linear both;
+          animation: left 0.3s linear both;
+  -webkit-animation-delay: 1s;
+          animation-delay: 1s;
+  transition: transform 0.6s;
+}
+.thermostat .bar span {
+  width: 356px;
+  font-weight: 800;
+  position: absolute;
+  bottom: 0px;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 15px;
+  color: #2e2c3a;
+  z-index: 10;
+}
+.thermostat .center {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background: #e3e4ed;
+  -webkit-animation: bound-in 0.6s ease forwards;
+          animation: bound-in 0.6s ease forwards;
+}
+.thermostat .center:hover .arrow {
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.thermostat .center:hover .minus {
+  left: 10px;
+  transition: left 0.3s ease-out;
+}
+.thermostat .center:hover .plus {
+  right: 45px;
+  transition: right 0.3s ease-out;
+}
+.thermostat .center span i {
+  position: absolute;
+  color: #b9b6c8;
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 260px;
+}
+.thermostat .center .arrow {
+  opacity: 0;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+.thermostat .center .minus {
+  position: absolute;
+  -webkit-animation: arrow-left 1s forwards;
+          animation: arrow-left 1s forwards;
+}
+.thermostat .center .plus {
+  position: absolute;
+  -webkit-animation: arrow-right 1s forwards;
+          animation: arrow-right 1s forwards;
+}
+.thermostat .center .small {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: #F8F9FA;
+  text-align: center;
+  -webkit-animation: bound-in-small 0.6s ease forwards;
+          animation: bound-in-small 0.6s ease forwards;
+}
+.thermostat .center .small .heat {
+  line-height: 150px;
+  font-size: 59px;
+  color: #57545f;
+  font-weight: 300;
+}
+.thermostat .center .small .heat:after {
+  content: "°";
+  display: block;
+  position: absolute;
+  font-size: 40px;
+  top: -20px;
+  right: 30px;
+}
+
+@-webkit-keyframes shadow {
+  0% {
+    transform: translate(-50%, -50%) rotate(-190deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(10deg);
+  }
+}
+@-webkit-keyframes right {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+@-webkit-keyframes left {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(10deg);
+  }
+}
+@-webkit-keyframes bound-in {
+  10% {
+    box-shadow: 0px 7px 30px 5px rgba(96, 93, 111, 0.25);
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+  100% {
+    box-shadow: 0px 15px 35px 11px rgba(46, 44, 58, 0.6);
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@-webkit-keyframes bound-in-small {
+  0% {
+    box-shadow: 0px 5px 10px 5px rgba(96, 93, 111, 0.19);
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  80% {
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+  100% {
+    box-shadow: 0px 15px 35px 5px rgba(96, 93, 111, 0.3);
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+/* percentage circle style */
+
+.circle {
+  width: 160px;
+  height: 160px;
+  cursor: default;
+  position: absolute;
+  left: 10px;
+  top: 30px;
+  display:flexbox;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.circle span {
+  position: absolute;
+  display: block;
+  vertical-align: middle;
+  width: 160px;
+  height: 160px;
+  text-align: center;
+  color: #3fbaef;
+  line-height: 160px;
+  font-size: 25px;
+  font-family: Helvetica, Arial, Geneva, sans-serif;
+  transition: font-size 0.2s ease-out;
+}
+.circle:before {
+  position: absolute;
+  content: "";
+  background-color: transparent;
+  width: 120px;
+  height: 120px;
+  border: 20px solid #06cfe9;
+  background: transparent;
+  border-radius: 100%;
+  transition: width 0.2s ease-out, height 0.2s ease-out, border-width 0.2s ease-out;
+}
+.circle .percentage-bar {
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  -webkit-clip-path: inset(0 0 0 50%);
+          clip-path: inset(0 0 0 50%);
+}
+.circle .percentage-bar:before {
+  position: absolute;
+  content: "";
+  -webkit-clip-path: inset(0 50% 0 0);
+          clip-path: inset(0 50% 0 0);
+  transform: rotate(0deg);
+  width: 120px;
+  height: 120px;
+  border: 20px solid #08a7ec;
+  background: transparent;
+  border-radius: 100%;
+  transition: width 0.2s ease-out, height 0.2s ease-out, border-width 0.2s ease-out;
+}
+.circle:hover:before {
+  width: 140px;
+  height: 140px;
+  border-width: 10px;
+}
+.circle:hover span {
+  font-size: 45px;
+}
+.circle:hover .percentage-bar:before, .circle:hover .percentage-bar:after {
+  width: 140px;
+  height: 140px;
+  border-width: 10px;
+}
+.circle.percentage-1 .percentage-bar:before {
+  transform: rotate(3.6deg);
+}
+.circle.percentage-2 .percentage-bar:before {
+  transform: rotate(7.2deg);
+}
+.circle.percentage-3 .percentage-bar:before {
+  transform: rotate(10.8deg);
+}
+.circle.percentage-4 .percentage-bar:before {
+  transform: rotate(14.4deg);
+}
+.circle.percentage-5 .percentage-bar:before {
+  transform: rotate(18deg);
+}
+.circle.percentage-6 .percentage-bar:before {
+  transform: rotate(21.6deg);
+}
+.circle.percentage-7 .percentage-bar:before {
+  transform: rotate(25.2deg);
+}
+.circle.percentage-8 .percentage-bar:before {
+  transform: rotate(28.8deg);
+}
+.circle.percentage-9 .percentage-bar:before {
+  transform: rotate(32.4deg);
+}
+.circle.percentage-10 .percentage-bar:before {
+  transform: rotate(36deg);
+}
+.circle.percentage-11 .percentage-bar:before {
+  transform: rotate(39.6deg);
+}
+.circle.percentage-12 .percentage-bar:before {
+  transform: rotate(43.2deg);
+}
+.circle.percentage-13 .percentage-bar:before {
+  transform: rotate(46.8deg);
+}
+.circle.percentage-14 .percentage-bar:before {
+  transform: rotate(50.4deg);
+}
+.circle.percentage-15 .percentage-bar:before {
+  transform: rotate(54deg);
+}
+.circle.percentage-16 .percentage-bar:before {
+  transform: rotate(57.6deg);
+}
+.circle.percentage-17 .percentage-bar:before {
+  transform: rotate(61.2deg);
+}
+.circle.percentage-18 .percentage-bar:before {
+  transform: rotate(64.8deg);
+}
+.circle.percentage-19 .percentage-bar:before {
+  transform: rotate(68.4deg);
+}
+.circle.percentage-20 .percentage-bar:before {
+  transform: rotate(72deg);
+}
+.circle.percentage-21 .percentage-bar:before {
+  transform: rotate(75.6deg);
+}
+.circle.percentage-22 .percentage-bar:before {
+  transform: rotate(79.2deg);
+}
+.circle.percentage-23 .percentage-bar:before {
+  transform: rotate(82.8deg);
+}
+.circle.percentage-24 .percentage-bar:before {
+  transform: rotate(86.4deg);
+}
+.circle.percentage-25 .percentage-bar:before {
+  transform: rotate(90deg);
+}
+.circle.percentage-26 .percentage-bar:before {
+  transform: rotate(93.6deg);
+}
+.circle.percentage-27 .percentage-bar:before {
+  transform: rotate(97.2deg);
+}
+.circle.percentage-28 .percentage-bar:before {
+  transform: rotate(100.8deg);
+}
+.circle.percentage-29 .percentage-bar:before {
+  transform: rotate(104.4deg);
+}
+.circle.percentage-30 .percentage-bar:before {
+  transform: rotate(108deg);
+}
+.circle.percentage-31 .percentage-bar:before {
+  transform: rotate(111.6deg);
+}
+.circle.percentage-32 .percentage-bar:before {
+  transform: rotate(115.2deg);
+}
+.circle.percentage-33 .percentage-bar:before {
+  transform: rotate(118.8deg);
+}
+.circle.percentage-34 .percentage-bar:before {
+  transform: rotate(122.4deg);
+}
+.circle.percentage-35 .percentage-bar:before {
+  transform: rotate(126deg);
+}
+.circle.percentage-36 .percentage-bar:before {
+  transform: rotate(129.6deg);
+}
+.circle.percentage-37 .percentage-bar:before {
+  transform: rotate(133.2deg);
+}
+.circle.percentage-38 .percentage-bar:before {
+  transform: rotate(136.8deg);
+}
+.circle.percentage-39 .percentage-bar:before {
+  transform: rotate(140.4deg);
+}
+.circle.percentage-40 .percentage-bar:before {
+  transform: rotate(144deg);
+}
+.circle.percentage-41 .percentage-bar:before {
+  transform: rotate(147.6deg);
+}
+.circle.percentage-42 .percentage-bar:before {
+  transform: rotate(151.2deg);
+}
+.circle.percentage-43 .percentage-bar:before {
+  transform: rotate(154.8deg);
+}
+.circle.percentage-44 .percentage-bar:before {
+  transform: rotate(158.4deg);
+}
+.circle.percentage-45 .percentage-bar:before {
+  transform: rotate(162deg);
+}
+.circle.percentage-46 .percentage-bar:before {
+  transform: rotate(165.6deg);
+}
+.circle.percentage-47 .percentage-bar:before {
+  transform: rotate(169.2deg);
+}
+.circle.percentage-48 .percentage-bar:before {
+  transform: rotate(172.8deg);
+}
+.circle.percentage-49 .percentage-bar:before {
+  transform: rotate(176.4deg);
+}
+.circle.percentage-50 .percentage-bar:before {
+  transform: rotate(180deg);
+}
+.circle.percentage-51 .percentage-bar:before {
+  transform: rotate(183.6deg);
+}
+.circle.percentage-52 .percentage-bar:before {
+  transform: rotate(187.2deg);
+}
+.circle.percentage-53 .percentage-bar:before {
+  transform: rotate(190.8deg);
+}
+.circle.percentage-54 .percentage-bar:before {
+  transform: rotate(194.4deg);
+}
+.circle.percentage-55 .percentage-bar:before {
+  transform: rotate(198deg);
+}
+.circle.percentage-56 .percentage-bar:before {
+  transform: rotate(201.6deg);
+}
+.circle.percentage-57 .percentage-bar:before {
+  transform: rotate(205.2deg);
+}
+.circle.percentage-58 .percentage-bar:before {
+  transform: rotate(208.8deg);
+}
+.circle.percentage-59 .percentage-bar:before {
+  transform: rotate(212.4deg);
+}
+.circle.percentage-60 .percentage-bar:before {
+  transform: rotate(216deg);
+}
+.circle.percentage-61 .percentage-bar:before {
+  transform: rotate(219.6deg);
+}
+.circle.percentage-62 .percentage-bar:before {
+  transform: rotate(223.2deg);
+}
+.circle.percentage-63 .percentage-bar:before {
+  transform: rotate(226.8deg);
+}
+.circle.percentage-64 .percentage-bar:before {
+  transform: rotate(230.4deg);
+}
+.circle.percentage-65 .percentage-bar:before {
+  transform: rotate(234deg);
+}
+.circle.percentage-66 .percentage-bar:before {
+  transform: rotate(237.6deg);
+}
+.circle.percentage-67 .percentage-bar:before {
+  transform: rotate(241.2deg);
+}
+.circle.percentage-68 .percentage-bar:before {
+  transform: rotate(244.8deg);
+}
+.circle.percentage-69 .percentage-bar:before {
+  transform: rotate(248.4deg);
+}
+.circle.percentage-70 .percentage-bar:before {
+  transform: rotate(252deg);
+}
+.circle.percentage-71 .percentage-bar:before {
+  transform: rotate(255.6deg);
+}
+.circle.percentage-72 .percentage-bar:before {
+  transform: rotate(259.2deg);
+}
+.circle.percentage-73 .percentage-bar:before {
+  transform: rotate(262.8deg);
+}
+.circle.percentage-74 .percentage-bar:before {
+  transform: rotate(266.4deg);
+}
+.circle.percentage-75 .percentage-bar:before {
+  transform: rotate(270deg);
+}
+.circle.percentage-76 .percentage-bar:before {
+  transform: rotate(273.6deg);
+}
+.circle.percentage-77 .percentage-bar:before {
+  transform: rotate(277.2deg);
+}
+.circle.percentage-78 .percentage-bar:before {
+  transform: rotate(280.8deg);
+}
+.circle.percentage-79 .percentage-bar:before {
+  transform: rotate(284.4deg);
+}
+.circle.percentage-80 .percentage-bar:before {
+  transform: rotate(288deg);
+}
+.circle.percentage-81 .percentage-bar:before {
+  transform: rotate(291.6deg);
+}
+.circle.percentage-82 .percentage-bar:before {
+  transform: rotate(295.2deg);
+}
+.circle.percentage-83 .percentage-bar:before {
+  transform: rotate(298.8deg);
+}
+.circle.percentage-84 .percentage-bar:before {
+  transform: rotate(302.4deg);
+}
+.circle.percentage-85 .percentage-bar:before {
+  transform: rotate(306deg);
+}
+.circle.percentage-86 .percentage-bar:before {
+  transform: rotate(309.6deg);
+}
+.circle.percentage-87 .percentage-bar:before {
+  transform: rotate(313.2deg);
+}
+.circle.percentage-88 .percentage-bar:before {
+  transform: rotate(316.8deg);
+}
+.circle.percentage-89 .percentage-bar:before {
+  transform: rotate(320.4deg);
+}
+.circle.percentage-90 .percentage-bar:before {
+  transform: rotate(324deg);
+}
+.circle.percentage-91 .percentage-bar:before {
+  transform: rotate(327.6deg);
+}
+.circle.percentage-92 .percentage-bar:before {
+  transform: rotate(331.2deg);
+}
+.circle.percentage-93 .percentage-bar:before {
+  transform: rotate(334.8deg);
+}
+.circle.percentage-94 .percentage-bar:before {
+  transform: rotate(338.4deg);
+}
+.circle.percentage-95 .percentage-bar:before {
+  transform: rotate(342deg);
+}
+.circle.percentage-96 .percentage-bar:before {
+  transform: rotate(345.6deg);
+}
+.circle.percentage-97 .percentage-bar:before {
+  transform: rotate(349.2deg);
+}
+.circle.percentage-98 .percentage-bar:before {
+  transform: rotate(352.8deg);
+}
+.circle.percentage-99 .percentage-bar:before {
+  transform: rotate(356.4deg);
+}
+.circle.percentage-100 .percentage-bar:before {
+  transform: rotate(360deg);
+}
+  </style>
+</head>
+<body>
+<div class="thermostat">
+  <div class="bar">
+    <div class="inner_bar"></div>
+    <div class='hold left'>
+      <div class='fill fill1'></div>
+    </div>
+    <div class='hold right'>
+      <div class='fill fill2'></div>
+    </div>
+    <span>temperature</span>
+  </div>
+  <div class="shadow">
+    <div class="shadow-cube"></div>
+  </div>
+  <div class="number">
+    <span class="ext">{{temperature}}</span>
+  </div>
+  <div class="center">
+    <div class="small">
+      <span class="heat">{{temperature}}</span>
+    </div>
+  </div>
+</div>
+<div class="circle-container">
+  <div class="circle percentage-{{ humidity }}">
+    <span>{{ humidity }}%</span>
+    <div class="percentage-bar"></div>
+</div>
+    <p>Humidity</p>
+</div>
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script>
+var gradi = 19;
+var max = 34;
+var min = 2;
+
+function updateGr(){
+  $(".heat").text("" + gradi);
+  $(".ext").text("" + gradi);
+  $(".number").css("transform", "translate(-50%, -50%) rotate("+ (-180 + gradi * 10)+"deg)");
+  $(".shadow").css("transform", "translate(-50%, -50%) rotate("+ (-180 + gradi * 10)+"deg)");
+  $(".fill").css("animation", "none");
+  $(".shadow").css("animation", "none");
+}
+
+
+$(".minus").mousedown(function(){
+  if(gradi > min){
+    gradi--;
+    updateGr();
+    if(gradi >= 18){
+      $(".fill1").css("transform", "rotate("+ (gradi - 18) * 10 +"deg)").css("transition-delay", "0s");
+    }else if(gradi == 17){
+      $(".fill2").css("transform", "rotate("+ gradi * 10 +"deg)").css("transition-delay", "0.5s");
+    }else{
+      $(".fill2").css("transform", "rotate("+ gradi * 10 +"deg)").css("transition-delay", "0s");
+    }
+  }
+});
+
+$(".plus").mousedown(function(){
+  if(gradi < max){
+    gradi++;
+    updateGr();
+    if(gradi > 19){
+      $(".fill1").css("transform", "rotate("+ (gradi - 18) * 10 +"deg)").css("transition-delay", "0s");
+    }else if(gradi == 19){
+      $(".fill1").css("transform", "rotate("+ (gradi - 18) * 10 +"deg)").css("transition-delay", "1s");
+    }else{
+      $(".fill2").css("transform", "rotate("+ gradi * 10 +"deg)").css("transition-delay", "0s");
+    }
+  }
+});
+  </script>
+</body>
+</html>
