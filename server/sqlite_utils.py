@@ -11,7 +11,7 @@ def initialize_db():
                 timestamp INTEGER,
               	red INTEGER,
               	green INTEGER,
-              	blue INTEGER
+              	blue INTEGER,
                 ripe INTEGER);''')
     conn.commit()
     conn.close()

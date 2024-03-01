@@ -94,10 +94,10 @@ def process_data():
         try:
             sqlite_utils.add_row(str(uuid.uuid4()), json_data["id"], (datetime.datetime.now()).strftime("%Y-%m-%dT%H:%M:%S"),
                     json_data["temperature"], json_data["humidity"], json_data["red"],
-                    json_data["green"], json_data["blue"])
+                    json_data["green"], json_data["blue"], json_data["ripe"])
             return "Success", 201
-        except:
-            return "Wrong data json file"
+        except KeyError:
+            return "Wrong data json file", 406
     else:
         return jsonify({"error": "No JSON data received"}), 400
 
