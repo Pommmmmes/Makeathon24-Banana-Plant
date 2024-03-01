@@ -7,6 +7,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import datetime
+import json
 
 app = Flask(__name__,  static_url_path='/static')
 
@@ -29,6 +30,21 @@ def display_plant_data(id):
     humidity = data[-1][3]
     ripeness = sqlite_utils.calculate_ripeness_percentage(data[-1][5], data[-1][6], data[-1][7])
     return render_template('./html/banana_bush.html', temperature=temperature, humidity=humidity, ripeness=ripeness)
+
+@app.route('/fetch_data=<id>', methods=["GET"])
+def fetch_data(id):
+    data = sqlite_utils.get_id_data(id)
+    temperature = data[-1][2]
+    humidity = data[-1][3]
+    ripeness = sqlite_utils.calculate_ripeness_percentage(data[-1][5], data[-1][6], data[-1][7])
+    my_dict = {}
+    my_dict["temperature"] = temperature
+    my_dict["humidity"] = humidity
+    my_dict["ripe"] = data[-1][-1]
+    with open("./templates/json/data.json", "w") as json_file:
+        json.dump(my_dict, json_file)
+    return send_file("./templates/json/data.json", mimetype='application/json')
+
 
 @app.route('/images/banana.svg')
 def display_svg():
