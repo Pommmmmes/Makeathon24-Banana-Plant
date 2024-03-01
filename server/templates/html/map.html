@@ -5,139 +5,153 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>I to the Square Root</title>
 <style>
-#map {
-  height: 400px;
-  width: 80%;
-  margin: 20px auto;
-}
-.button-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 100fr); /* Adjust the number of columns here */
-    grid-gap: 25px; /* Adjust the gap between buttons */
-  }
-
-button {
-  --bg: #e5f904;
-  --text-color: #010db7;
+body {
   position: relative;
-  width: 150px;
-  border: none;
-  background: var(--bg);
-  color: var(--text-color);
-  padding: 1em;
-  font-weight: bold;
-  text-transform: uppercase;
-  transition: 0.2s;
+  background-color: blanchedalmond;
+}
+.image-button1 {
+  position: absolute;
+  top: 200px;
+  right: 600px;
+  display: inline-block;
+  z-index: 1;
+  cursor: pointer;
+}
+.image-button2 {
+  position: absolute;
+  bottom: 400px;
+  left: 520px;
+  display: inline-block;
+  z-index: 1;
+  cursor: pointer;
+}
+.image-button3 {
+  position: absolute;
+  top: 300px;
+  left: 600px;
+  display: inline-block;
+  z-index: 1;
+  cursor: pointer;
+}
+.image-button4 {
+  position: absolute;
+  bottom: 200px;
+  left: 880px;
+  display: inline-block;
+  z-index: 1;
+  cursor: pointer;
+}
+.speech-bubble {
+  position: absolute;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
   border-radius: 5px;
-  opacity: 0.8;
-  letter-spacing: 1px;
-  box-shadow: #899601 0px 7px 2px, #000 0px 8px 5px;
+  padding: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  display: none;
+}
+.details-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.close-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 5px;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.status-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+#plantation-image {
+  max-width: 100%;
+  height: auto;
 }
 
-button:hover {
-  opacity: 1;
-}
 
-button:active {
-  top: 4px;
-  box-shadow: #c0392b 0px 3px 2px,#000 0px 3px 5px;
-}
 </style>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-crossorigin=""/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
 </head>
 <body>
 
-<div id="map"></div>
+  <div id="speechBubble" class="speech-bubble">
+    <span id="farmName"></span><br>
+    <form id="actionForm" method="GET">
+      <button class="status-button" type="submit">Show Status</button>
+    </form>
+    <form id="detailsForm" method="GET">
+      <button class="details-button" type="submit">Show Details</button>
+    </form>
+    <button class="close-button" onclick="closeBubble()">X</button>
+  </div>
 
 <script>
-  function getBaseURL() {
-    return window.location.protocol + "//" + window.location.host + "/";
+
+    // Function to execute when the image button is clicked
+  function onButtonClick(buttonId, farmName) {
+    var speechBubble = document.getElementById("speechBubble");
+    var button = document.getElementById(buttonId);
+
+    // Get the position of the button
+    var buttonRect = button.getBoundingClientRect();
+
+    // Set the position of the speech bubble relative to the button
+    button.style
+    speechBubble.style.top = buttonRect.top + button.offsetHeight + 'px';
+    speechBubble.style.left = buttonRect.left + 'px';
+    speechBubble.style.display = "block";
+
+    document.getElementById("farmName").textContent = farmName;
+    var actionForm = document.getElementById("actionForm");
+    var detailsForm = document.getElementById("detailsForm");
+    actionForm.action = "/id=" + buttonId.substring(buttonId.length - 1);
+    detailsForm.action = "/data?id=" + buttonId.substring(buttonId.length - 1);
   }
-  var map = L.map('map').setView([28.085024230023485, -15.5080312942105], 16);
 
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+  function closeBubble() {
+    var speechBubble = document.getElementById("speechBubble");
+    speechBubble.style.display = "none";
+  }
 
-  var url = getBaseURL();
-  url += "coordinates"
-  // Fetching JSON data from the endpoint
-  fetch(url)
-    .then(response => response.json())
-    .then(data => {
-      Object.entries(data).forEach(([id, coordinates]) => {
-        const [lat, lng] = coordinates.split(', ').map(Number);
-        let icon;
-        var redIcon = new L.Icon({
-          iconUrl: '../images/marker-icon-2x-red.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
-        });
-        var blueIcon = new L.Icon({
-          iconUrl: '../images/marker-icon-blue.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
-        });
-        if (id === '1')
-          icon = redIcon;
-        else
-         icon = blueIcon;
-        L.marker([lat, lng], {icon:icon}).addTo(map)
-          .bindPopup(`ID: ${id}<br>Coordinates: ${coordinates}`)
-          .openPopup();
-      });
-    })
-    .catch(error => console.error('Error fetching data: ', error));
+  </script>
 
+<a href="#" id="image-button1" class="image-button1" onclick="onButtonClick('image-button1', 'Farm 1')">
+  <img src="./images/bn_button.png" alt="Button Image">
+</a>
 
-</script>
+<a href="#" id="image-button2" class="image-button2" onclick="onButtonClick('image-button2', 'Farm 2')">
+  <img src="./images/bn_button.png" alt="Button Image">
+</a>
 
-<div class="button-grid">
-  <a href="/id=1">
-  <button class="button">Banana bush 1</button>
-  </a>
-  <a href="/id=2">
-  <button class="button">Banana bush 2</button>
-  </a>
-  <a href="/id=3">
-  <button class="button">Banana bush 3</button>
-  </a>
-  <a href="/id=4">
-  <button class="button">Banana bush 4</button>
-  </a>
-  <a href="/id=5">
-  <button class="button">Banana bush 5</button>
-  </a>
-  <a href="/id=6">
-  <button class="button">Banana bush 6</button>
-  </a>
-  <a href="/id=7">
-  <button class="button">Banana bush 7</button>
-  </a>
-  <a href="/id=8">
-  <button class="button">Banana bush 8</button>
-  </a>
-  <a href="/id=9">
-  <button class="button">Banana bush 9</button>
-  </a>
-  <a href="/id=10">
-  <button class="button">Banana bush 10</button>
-  </a>
-  <a href="/id=11">
-  <button class="button">Banana bush 11</button>
-  </a>
-  <a href="/id=12">
-  <button class="button">Banana bush 12</button>
-  </a>
+<a href="#" id="image-button3" class="image-button3" onclick="onButtonClick('image-button3', 'Farm 3')">
+  <img src="./images/bn_button.png" alt="Button Image">
+</a>
+
+<a href="#" id="image-button4" class="image-button4" onclick="onButtonClick('image-button4', 'Farm 4')">
+  <img src="./images/bn_button.png" alt="Button Image">
+</a>
+
+<div style="text-align: center;">
+  <img src="images/bananaplantation.jpeg" alt="Plantation Image" id="plantation-image">
 </div>
 
 </body>
