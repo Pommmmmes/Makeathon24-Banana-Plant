@@ -41,9 +41,8 @@ def fetch_data(id):
     my_dict["temperature"] = temperature
     my_dict["humidity"] = humidity
     my_dict["ripe"] = data[-1][-1]
-    with open("./templates/json/data.json", "w") as json_file:
-        json.dump(my_dict, json_file)
-    return send_file("./templates/json/data.json", mimetype='application/json')
+    my_dict["ripeness"] = ripeness
+    return json.dumps(my_dict), 200
 
 
 @app.route('/images/banana.svg')
