@@ -57,11 +57,11 @@ def display_banana_plantation():
 def show_map():
     return send_file('./templates/html/map.html')
 
-@app.route('/data', methods=["GET"])
-def display_details():
-    humidity_data = sqlite_utils.get_array_from_db("humidity", "1")
-    temperature_data = sqlite_utils.get_array_from_db("temperature", "1")
-    growth_data = sqlite_utils.get_percentage_arr("1")
+@app.route('/data=<id>', methods=["GET"])
+def display_details(id):
+    humidity_data = sqlite_utils.get_array_from_db("humidity", id)
+    temperature_data = sqlite_utils.get_array_from_db("temperature", id)
+    growth_data = sqlite_utils.get_percentage_arr(id)
     today = datetime.date.today()
     dates = [str(today - datetime.timedelta(days=i)) for i in range(6, -1, -1)]
 

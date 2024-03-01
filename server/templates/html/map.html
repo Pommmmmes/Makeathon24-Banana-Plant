@@ -124,7 +124,7 @@ body {
     var actionForm = document.getElementById("actionForm");
     var detailsForm = document.getElementById("detailsForm");
     actionForm.action = "/id=" + buttonId.substring(buttonId.length - 1);
-    detailsForm.action = "/data?id=" + buttonId.substring(buttonId.length - 1);
+    detailsForm.action = "/data=" + buttonId.substring(buttonId.length - 1);
   }
 
   function closeBubble() {
