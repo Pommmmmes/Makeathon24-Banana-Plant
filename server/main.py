@@ -51,9 +51,9 @@ def show_map():
 
 @app.route('/data', methods=["GET"])
 def display_details():
-    humidity_data = sqlite_utils.get_array_from_db("humidity")
-    temperature_data = sqlite_utils.get_array_from_db("temperature")
-    growth_data = sqlite_utils.get_percentage_arr()
+    humidity_data = sqlite_utils.get_array_from_db("humidity", "1")
+    temperature_data = sqlite_utils.get_array_from_db("temperature", "1")
+    growth_data = sqlite_utils.get_percentage_arr("1")
     today = datetime.date.today()
     dates = [str(today - datetime.timedelta(days=i)) for i in range(6, -1, -1)]
 
