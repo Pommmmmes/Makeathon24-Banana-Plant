@@ -88,6 +88,19 @@ def get_percentage_arr():
     conn.close()
     return results
 
+def get_id_data(id):
+    # Connect to the SQLite database
+    conn = sqlite3.connect('measurements.db')
+    cursor = conn.cursor()
+
+    # Fetch data from the database
+    cursor.execute("SELECT * FROM measurements WHERE id=" + id)
+    data = cursor.fetchall()
+
+    # Close the database connection
+    conn.close()
+    return data
+
 
 # tbd ??
 

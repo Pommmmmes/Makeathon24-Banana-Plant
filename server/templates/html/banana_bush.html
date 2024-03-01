@@ -18,7 +18,9 @@
 
 html, body {
   margin: 0;
-  background: #fdfdfd;
+  background-image: url('../images/sky.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
   font-family: "Open Sans", sans-serif;
 }
 
@@ -279,19 +281,12 @@ html, body {
   width: 160px;
   height: 160px;
   cursor: default;
-  position: relative;
-}
-
-/* Top Left Circle */
-.circle-top-left {
-  top: 20px;
-  left: 20px;
-}
-
-/* Top Right Circle */
-.circle-top-right {
-  top: 200px;
-  right: 20px;
+  position: absolute;
+  left: 10px;
+  top: 30px;
+  display:flexbox;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .circle span {
@@ -301,7 +296,7 @@ html, body {
   width: 160px;
   height: 160px;
   text-align: center;
-  color: #74B3CE;
+  color: #3fbaef;
   line-height: 160px;
   font-size: 25px;
   font-family: Helvetica, Arial, Geneva, sans-serif;
@@ -313,7 +308,7 @@ html, body {
   background-color: transparent;
   width: 120px;
   height: 120px;
-  border: 20px solid #508991;
+  border: 20px solid #06cfe9;
   background: transparent;
   border-radius: 100%;
   transition: width 0.2s ease-out, height 0.2s ease-out, border-width 0.2s ease-out;
@@ -333,7 +328,7 @@ html, body {
   transform: rotate(0deg);
   width: 120px;
   height: 120px;
-  border: 20px solid #74B3CE;
+  border: 20px solid #08a7ec;
   background: transparent;
   border-radius: 100%;
   transition: width 0.2s ease-out, height 0.2s ease-out, border-width 0.2s ease-out;
@@ -654,16 +649,6 @@ html, body {
   </style>
 </head>
 <body>
-<div class="circle-top-left">
-    <div class="circle percentage-50">
-      <span>50%</span>
-      <div class="percentage-bar"></div>
-</div>
-<div class="circle-top-right">
-  <div class="circle percentage-12">
-    <span>12%</span>
-    <div class="percentage-bar"></div>
-</div>
 <div class="thermostat">
   <div class="bar">
     <div class="inner_bar"></div>
@@ -673,19 +658,26 @@ html, body {
     <div class='hold right'>
       <div class='fill fill2'></div>
     </div>
-    <span></span>
+    <span>temperature</span>
   </div>
   <div class="shadow">
     <div class="shadow-cube"></div>
   </div>
   <div class="number">
-    <span class="ext">19</span>
+    <span class="ext">{{temperature}}</span>
   </div>
   <div class="center">
     <div class="small">
-      <span class="heat">19</span>
+      <span class="heat">{{temperature}}</span>
     </div>
   </div>
+</div>
+<div class="circle-container">
+  <div class="circle percentage-{{ humidity }}">
+    <span>{{ humidity }}%</span>
+    <div class="percentage-bar"></div>
+</div>
+    <p>Humidity</p>
 </div>
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
