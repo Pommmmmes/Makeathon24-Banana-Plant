@@ -132,11 +132,10 @@ def get_coordinates():
 def get_percentages():
     return sqlite_utils.get_percentage_arr()
 
-def main():
+if __name__ == "__main__":
     sqlite_utils.initialize_db()
     app.run(host='0.0.0.0', port=8080, debug=True)
 
-main()
 
 # {
 #   "uuid": "banana",
